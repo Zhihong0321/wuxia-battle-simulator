@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuxia_battle_simulator/schemas/characters.schema.json",
+  "title": "Characters",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "oneOf": [
+      { "required": ["id", "name", "faction", "stats", "skills"] },
+      { "required": ["id", "name", "faction", "skills"], "not": { "required": ["stats"] } }
+    ],
+    "properties": {
+      "id": { "type": "string", "minLength": 1 },
+      "name": { "type": "string", "minLength": 1 },
+      "faction": { "type": "string", "minLength": 1 },
+      "level": { "type": "integer", "minimum": 0 },
+      "faction_terminology": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attack_prefix": { "type": "string" },
+          "defense_prefix": { "type": "string" },
+          "qi_name": { "type": "string" }
+        }
+      },
+      "stats": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["hp", "max_hp", "qi", "max_qi", "strength", "agility", "defense"],
+        "properties": {
+          "hp": { "type": "integer", "minimum": 0 },
+          "max_hp": { "type": "integer", "minimum": 1 },
+          "qi": { "type": "integer", "minimum": 0 },
+          "max_qi": { "type": "integer", "minimum": 0 },
+          "strength": { "type": "integer", "minimum": 0 },
+          "agility": { "type": "integer", "minimum": 0 },
+          "defense": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "strength": { "type": "integer", "minimum": 0 },
+      "defense": { "type": "integer", "minimum": 0 },
+      "agility": { "type": "integer", "minimum": 0 },
+      "qi": { "type": "integer", "minimum": 0 },
+      "max_hp": { "type": "integer", "minimum": 1 },
+      "skills": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["skill_id", "tier"],
+              "properties": {
+                "skill_id": { "type": "string", "minLength": 1 },
+                "tier": { "type": "integer", "minimum": 1 }
+              }
+            },
+            { "type": "string", "minLength": 1 }
+          ]
+        }
+      },
+      "personality_traits": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "battle_quotes": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "victory": { "type": "array", "items": { "type": "string" } },
+          "defeat": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "strength": { "type": "integer", "minimum": 0 },
+      "defense": { "type": "integer", "minimum": 0 },
+      "agility": { "type": "integer", "minimum": 0 },
+      "qi": { "type": "integer", "minimum": 0 },
+      "max_hp": { "type": "integer", "minimum": 1 }
+    }
+  }
+}

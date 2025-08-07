@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuxia_battle_simulator/schemas/templates.schema.json",
+  "title": "Templates",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "narrative_type"],
+    "properties": {
+      "id": { "type": "string", "minLength": 1 },
+      "narrative_type": { "type": "string", "minLength": 1 },
+      "template": { "type": "string", "minLength": 1 },
+      "text": { "type": "string", "minLength": 1 },
+      "connective_phrases": {
+        "type": "array",
+        "items": { "type": "string", "minLength": 1 }
+      },
+      "conditions": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "hit": { "type": "boolean" },
+          "critical": { "type": "boolean" },
+          "damage_percent": {
+            "oneOf": [
+              { "type": "string", "enum": ["low", "medium", "high"] },
+              { "type": "string", "pattern": "^(<=|<|>=|>)\\s*\\d+(\\.\\d+)?%?$" }
+            ]
+          },
+          "actor_faction": { "type": "string" },
+          "target_faction": { "type": "string" }
+        }
+      }
+    },
+    "anyOf": [
+      { "required": ["template"] },
+      { "required": ["text"] }
+    ]
+  }
+}

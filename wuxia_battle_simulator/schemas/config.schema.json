@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuxia_battle_simulator/schemas/config.schema.json",
+  "title": "Config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rng_seed"],
+  "properties": {
+    "rng_seed": { "type": "integer" },
+    "locale": { "type": "string" },
+    "flags": {
+      "type": "object",
+      "additionalProperties": { "type": "boolean" }
+    },
+    "atb_threshold": { "type": "number" },
+    "atb_tick_scale": { "type": "number" },
+    "ui": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "show_damage_numbers": { "type": "boolean" },
+        "show_crit_effects": { "type": "boolean" }
+      }
+    }
+  }
+}

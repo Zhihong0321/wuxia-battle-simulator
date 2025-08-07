@@ -1,0 +1,208 @@
+{
+  "skills": [
+    {
+      "id": "skill_xianglong",
+      "name": "降龙十八掌",
+      "type": "攻击",
+      "description": "丐帮镇帮绝学，刚猛无俦",
+      "tiers": [
+        {
+          "tier": 1,
+          "tier_name": "第一式",
+          "parameters": {
+            "base_damage": 20,
+            "power_multiplier": 1.0,
+            "qi_cost": 10,
+            "cooldown": 1,
+            "hit_chance": 0.8,
+            "critical_chance": 0.1
+          },
+          "visual_effects": ["掌风", "气势"],
+          "sound_effects": ["怒喝", "掌风声"]
+        },
+        {
+          "tier": 2,
+          "tier_name": "第二式",
+          "parameters": {
+            "base_damage": 30,
+            "power_multiplier": 1.2,
+            "qi_cost": 15,
+            "cooldown": 1,
+            "hit_chance": 0.85,
+            "critical_chance": 0.15
+          },
+          "visual_effects": ["掌风", "龙形气劲"],
+          "sound_effects": ["龙吟", "掌风声"]
+        }
+      ]
+    },
+    {
+      "id": "skill_taichi",
+      "name": "太极拳",
+      "type": "抵挡",
+      "description": "以柔克刚，四两拨千斤",
+      "tiers": [
+        {
+          "tier": 1,
+          "tier_name": "入门",
+          "parameters": {
+            "base_damage": 5,
+            "power_multiplier": 0.5,
+            "qi_cost": 5,
+            "cooldown": 1,
+            "hit_chance": 0.7,
+            "critical_chance": 0.05
+          },
+          "visual_effects": ["太极图影"],
+          "sound_effects": ["呼吸声"]
+        }
+      ]
+    },
+    {
+      "id": "skill_huashan_sword",
+      "name": "华山剑法",
+      "type": "攻击",
+      "description": "华山派正宗剑术，轻灵迅捷",
+      "tiers": [
+        {
+          "tier": 1,
+          "tier_name": "起手式",
+          "parameters": {
+            "base_damage": 16,
+            "power_multiplier": 0.9,
+            "qi_cost": 8,
+            "cooldown": 1,
+            "hit_chance": 0.82,
+            "critical_chance": 0.1
+          },
+          "visual_effects": ["剑光"],
+          "sound_effects": ["破空声"]
+        },
+        {
+          "tier": 2,
+          "tier_name": "精进式",
+          "parameters": {
+            "base_damage": 24,
+            "power_multiplier": 1.1,
+            "qi_cost": 12,
+            "cooldown": 1,
+            "hit_chance": 0.85,
+            "critical_chance": 0.15
+          },
+          "visual_effects": ["剑光", "寒芒"],
+          "sound_effects": ["破空声"]
+        }
+      ]
+    },
+    {
+      "id": "skill_wudang_dodge",
+      "name": "武当身法",
+      "type": "闪避",
+      "description": "身随步转，如行云流水",
+      "tiers": [
+        {
+          "tier": 1,
+          "tier_name": "身随意动",
+          "parameters": {
+            "base_damage": 0,
+            "power_multiplier": 0.0,
+            "qi_cost": 0,
+            "cooldown": 1,
+            "hit_chance": 0.0,
+            "critical_chance": 0.0
+          },
+          "visual_effects": ["残影"],
+          "sound_effects": ["衣袂声"]
+        }
+      ]
+    },
+    {
+      "id": "skill_dragon_roar",
+      "name": "龙吟九天",
+      "type": "暴击",
+      "description": "气吞山河，震慑敌胆",
+      "tiers": [
+        {
+          "tier": 1,
+          "tier_name": "龙吟初啸",
+          "parameters": {
+            "base_damage": 26,
+            "power_multiplier": 1.2,
+            "qi_cost": 18,
+            "cooldown": 2,
+            "hit_chance": 0.75,
+            "critical_chance": 0.25
+          },
+          "visual_effects": ["龙影"],
+          "sound_effects": ["龙吟"]
+        }
+      ]
+    },
+    {
+      "id": "skill_inner_palm",
+      "name": "纯阳掌",
+      "type": "攻击",
+      "description": "内劲充盈，阳刚纯正",
+      "tiers": [
+        {
+          "tier": 1,
+          "tier_name": "纯阳入门",
+          "parameters": {
+            "base_damage": 18,
+            "power_multiplier": 1.0,
+            "qi_cost": 10,
+            "cooldown": 1,
+            "hit_chance": 0.78,
+            "critical_chance": 0.12
+          },
+          "visual_effects": ["掌劲"],
+          "sound_effects": ["爆裂声"]
+        }
+      ]
+    },
+    {
+      "id": "skill_wudang_sword",
+      "name": "武当太极剑",
+      "type": "攻击",
+      "description": "以意御剑，圆融无碍",
+      "tiers": [
+        {
+          "tier": 1,
+          "tier_name": "太极起势",
+          "parameters": {
+            "base_damage": 14,
+            "power_multiplier": 0.95,
+            "qi_cost": 8,
+            "cooldown": 1,
+            "hit_chance": 0.84,
+            "critical_chance": 0.1
+          },
+          "visual_effects": ["剑圈"],
+          "sound_effects": ["破空声"]
+        }
+      ]
+    },
+    {
+      "id": "skill_counter_parry",
+      "name": "卸力化劲",
+      "type": "抵挡",
+      "description": "四两拨千斤，借力打力",
+      "tiers": [
+        {
+          "tier": 1,
+          "tier_name": "卸力入门",
+          "parameters": {
+            "base_damage": 6,
+            "power_multiplier": 0.6,
+            "qi_cost": 5,
+            "cooldown": 1,
+            "hit_chance": 0.7,
+            "critical_chance": 0.05
+          },
+          "visual_effects": ["太极纹"],
+          "sound_effects": ["闷响"]
+        }
+      ]
+    }
+  ]
+}

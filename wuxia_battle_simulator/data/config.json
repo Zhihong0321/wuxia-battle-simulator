@@ -1,0 +1,9 @@
+{
+  "rng_seed": 42,
+  "atb_threshold": 100,
+  "atb_tick_scale": 1.0,
+  "ui": {
+    "speed": 1.0,
+    "theme": "default"
+  }
+}

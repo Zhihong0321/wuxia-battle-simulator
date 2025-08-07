@@ -1,0 +1,268 @@
+{
+  "templates": [
+    {
+      "id": "atk_huashan_low_01",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "low", "actor_faction": "华山派" },
+      "template": "{attacker}剑势如风，{faction_terminology.attack_prefix}【{skill}】{tier_name}轻挑而至，剑光一掠，{target}肩头一麻！",
+      "connective_phrases": ["随即", "说时迟那时快", "转瞬之间"]
+    },
+    {
+      "id": "atk_huashan_low_02",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "low", "actor_faction": "华山派" },
+      "template": "{attacker}腰胯一送，剑锋轻点，【{skill}】{tier_name}快若流星，{target}被逼得连退半步。",
+      "connective_phrases": ["霎时间", "只见", "刹那间"]
+    },
+    {
+      "id": "atk_huashan_low_03",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "low", "actor_faction": "华山派" },
+      "template": "{attacker}手腕微抖，寒芒一闪，【{skill}】{tier_name}点到即收，{target}胸前衣襟被挑起一道裂口。",
+      "connective_phrases": ["紧接着", "随即", "转眼间"]
+    },
+    {
+      "id": "atk_huashan_med_01",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "medium", "actor_faction": "华山派" },
+      "template": "{attacker}步伐连环，剑势疾走，【{skill}】{tier_name}直逼{target}门面，劲风逼人，{target}闷哼连退！",
+      "connective_phrases": ["只见", "霎时间", "说时迟那时快"]
+    },
+    {
+      "id": "atk_huashan_med_02",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "medium", "actor_faction": "华山派" },
+      "template": "{attacker}剑势锋锐如霜，【{skill}】{tier_name}横掠三分，{target}虎口一震，血气翻涌！",
+      "connective_phrases": ["紧接着", "刹那间", "只见"]
+    },
+    {
+      "id": "atk_huashan_med_03",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "medium", "actor_faction": "华山派" },
+      "template": "{attacker}长剑回转，锋芒再起，【{skill}】{tier_name}疾斩而下，{target}肩臂一沉，踉跄退后！",
+      "connective_phrases": ["随即", "霎时间", "只见"]
+    },
+    {
+      "id": "atk_huashan_high_01",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "high", "actor_faction": "华山派" },
+      "template": "{attacker}身形前欺，剑势如潮，【{skill}】{tier_name}轰然压下，剑光交织，{target}胸口一震，气血翻腾！",
+      "connective_phrases": ["刹那间", "只见", "霎时间"]
+    },
+    {
+      "id": "atk_huashan_high_02",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "high", "actor_faction": "华山派" },
+      "template": "{attacker}剑锋破空直落，【{skill}】{tier_name}势大力沉，{target}被震得脚下生根，难以招架！",
+      "connective_phrases": ["只见", "随即", "说时迟那时快"]
+    },
+    {
+      "id": "atk_huashan_high_03",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "high", "actor_faction": "华山派" },
+      "template": "{attacker}剑随身走，罡风呼啸，【{skill}】{tier_name}连吞三分锐气，{target}胸膛剧震，面色发白！",
+      "connective_phrases": ["霎时间", "紧接着", "只见"]
+    },
+
+    {
+      "id": "atk_wudang_low_01",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "low", "actor_faction": "武当派" },
+      "template": "{attacker}气走周天，手中剑意圆融，【{skill}】{tier_name}轻描淡写，{target}胸口微闷。",
+      "connective_phrases": ["随即", "转瞬之间", "霎时间"]
+    },
+    {
+      "id": "atk_wudang_low_02",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "low", "actor_faction": "武当派" },
+      "template": "{attacker}以意御剑，圆转若环，【{skill}】{tier_name}柔中带刚，{target}被逼得侧身避让。",
+      "connective_phrases": ["只见", "然而", "随即"]
+    },
+    {
+      "id": "atk_wudang_low_03",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "low", "actor_faction": "武当派" },
+      "template": "{attacker}掌意回环，太极成势，【{skill}】{tier_name}轻推而出，{target}站桩不稳，连退一步。",
+      "connective_phrases": ["转眼间", "紧接着", "霎时间"]
+    },
+    {
+      "id": "atk_wudang_med_01",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "medium", "actor_faction": "武当派" },
+      "template": "{attacker}太极圆劲贯通，【{skill}】{tier_name}借力打力，一推一引之间，{target}胸中气血翻滚！",
+      "connective_phrases": ["只见", "随即", "霎时间"]
+    },
+    {
+      "id": "atk_wudang_med_02",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "medium", "actor_faction": "武当派" },
+      "template": "{attacker}环腕纳势，剑走圆弧，【{skill}】{tier_name}后发先至，{target}闷哼倒退两步！",
+      "connective_phrases": ["刹那间", "转瞬之间", "只见"]
+    },
+    {
+      "id": "atk_wudang_med_03",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "medium", "actor_faction": "武当派" },
+      "template": "{attacker}以柔克刚，劲走太极，【{skill}】{tier_name}缓发而至，实则蓄力已满，{target}面色一变！",
+      "connective_phrases": ["随即", "霎时间", "只见"]
+    },
+    {
+      "id": "atk_wudang_high_01",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "high", "actor_faction": "武当派" },
+      "template": "{attacker}周身真元滚滚，【{skill}】{tier_name}太极大开大合，一鼓荡出，{target}气海震荡，难以招架！",
+      "connective_phrases": ["刹那间", "只见", "霎时间"]
+    },
+    {
+      "id": "atk_wudang_high_02",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "high", "actor_faction": "武当派" },
+      "template": "{attacker}一引一领，借势放大，【{skill}】{tier_name}太极大势成圆，{target}被震得胸口发闷！",
+      "connective_phrases": ["只见", "随即", "说时迟那时快"]
+    },
+    {
+      "id": "atk_wudang_high_03",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "high", "actor_faction": "武当派" },
+      "template": "{attacker}圆劲激荡，势如回龙，【{skill}】{tier_name}铺天盖地而至，{target}身形一晃，面色惨白！",
+      "connective_phrases": ["霎时间", "紧接着", "只见"]
+    },
+
+    {
+      "id": "crit_generic_01",
+      "narrative_type": "暴击",
+      "conditions": { "hit": true, "critical": true, "damage_percent": "high" },
+      "template": "{attacker}怒喝一声，【{skill}】{tier_name}威力全开，{visual_effects[0]}撕裂空气，一击重创{target}！{sound_effects[0]}震天动地！",
+      "connective_phrases": ["只听", "霎时间", "刹那间"]
+    },
+    {
+      "id": "crit_huashan_01",
+      "narrative_type": "暴击",
+      "conditions": { "hit": true, "critical": true, "damage_percent": "high", "actor_faction": "华山派" },
+      "template": "{attacker}剑势陡张，寒芒迸射，【{skill}】{tier_name}锋锐破体，{target}仿若遭雷击般踉跄！",
+      "connective_phrases": ["霎时间", "只见", "说时迟那时快"]
+    },
+    {
+      "id": "crit_huashan_02",
+      "narrative_type": "暴击",
+      "conditions": { "hit": true, "critical": true, "actor_faction": "华山派" },
+      "template": "{attacker}剑走龙蛇，罡风如啸，【{skill}】{tier_name}直入中宫，{target}胸膛大震，血涌上喉！",
+      "connective_phrases": ["刹那间", "紧接着", "只见"]
+    },
+    {
+      "id": "crit_wudang_01",
+      "narrative_type": "暴击",
+      "conditions": { "hit": true, "critical": true, "damage_percent": "high", "actor_faction": "武当派" },
+      "template": "{attacker}圆劲蓄满，一鼓尽发，【{skill}】{tier_name}太极一合，罡劲内涌，{target}五脏剧震！",
+      "connective_phrases": ["只见", "霎时间", "随即"]
+    },
+    {
+      "id": "crit_wudang_02",
+      "narrative_type": "暴击",
+      "conditions": { "hit": true, "critical": true, "actor_faction": "武当派" },
+      "template": "{attacker}以柔破刚，圆融不滞，【{skill}】{tier_name}瞬间放大，{target}全身气机一滞，险些落败！",
+      "connective_phrases": ["转瞬之间", "只见", "霎时间"]
+    },
+
+    {
+      "id": "defend_generic_01",
+      "narrative_type": "抵挡",
+      "conditions": { "hit": true, "critical": false },
+      "template": "{target}双臂一架，{faction_terminology.defense_prefix}化去来劲，借势卸去攻势。",
+      "connective_phrases": ["紧接着", "随即"]
+    },
+    {
+      "id": "defend_huashan_01",
+      "narrative_type": "抵挡",
+      "conditions": { "hit": true, "critical": false, "target_faction": "华山派" },
+      "template": "{target}剑势回护，一转一封，将{attacker}锋锐之势隔在圈外。",
+      "connective_phrases": ["然而", "随即"]
+    },
+    {
+      "id": "defend_wudang_01",
+      "narrative_type": "抵挡",
+      "conditions": { "hit": true, "critical": false, "target_faction": "武当派" },
+      "template": "{target}一粘一走，化劲回环，轻轻引领，便将{attacker}来力卸去。",
+      "connective_phrases": ["只见", "转瞬之间"]
+    },
+    {
+      "id": "defend_wudang_02",
+      "narrative_type": "抵挡",
+      "conditions": { "hit": true, "critical": false, "target_faction": "武当派" },
+      "template": "{target}身形不乱，太极成势，虚实相生，任{attacker}劲势自化。",
+      "connective_phrases": ["随即", "霎时间"]
+    },
+
+    {
+      "id": "dodge_generic_01",
+      "narrative_type": "闪避",
+      "conditions": { "hit": false },
+      "template": "{attacker}招势凛冽，【{skill}】{tier_name}疾袭而至，{target}身形一错，空余劲风不见人影！",
+      "connective_phrases": ["岂料", "不料", "然而"]
+    },
+    {
+      "id": "dodge_huashan_01",
+      "narrative_type": "闪避",
+      "conditions": { "hit": false, "target_faction": "华山派" },
+      "template": "{target}脚下连踏，剑光回护，身形如燕，堪堪避过{attacker}一击！",
+      "connective_phrases": ["只见", "霎时间"]
+    },
+    {
+      "id": "dodge_huashan_02",
+      "narrative_type": "闪避",
+      "conditions": { "hit": false, "target_faction": "华山派" },
+      "template": "{target}身随剑走，回身疾退，留下一缕寒芒，令{attacker}落了空处。",
+      "connective_phrases": ["随即", "紧接着"]
+    },
+    {
+      "id": "dodge_wudang_01",
+      "narrative_type": "闪避",
+      "conditions": { "hit": false, "target_faction": "武当派" },
+      "template": "{target}肩随胯转，步伐圆融，似有太极护身，轻轻一引，便令{attacker}劲势落空。",
+      "connective_phrases": ["然而", "霎时间"]
+    },
+    {
+      "id": "dodge_wudang_02",
+      "narrative_type": "闪避",
+      "conditions": { "hit": false, "target_faction": "武当派" },
+      "template": "{target}身形一化，踏罡步斗，虚步一转，{attacker}再难觅其行迹。",
+      "connective_phrases": ["只见", "随即"]
+    },
+
+    {
+      "id": "atk_generic_low_04",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "low" },
+      "template": "{attacker}试探一击，【{skill}】{tier_name}点到即收，{target}微微后退。",
+      "connective_phrases": ["转眼间", "随即"]
+    },
+    {
+      "id": "atk_generic_med_04",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "medium" },
+      "template": "{attacker}劲贯四梢，【{skill}】{tier_name}直取要害，{target}闷声后仰！",
+      "connective_phrases": ["只见", "霎时间"]
+    },
+    {
+      "id": "atk_generic_high_04",
+      "narrative_type": "攻击",
+      "conditions": { "hit": true, "critical": false, "damage_percent": "high" },
+      "template": "{attacker}全力爆发，【{skill}】{tier_name}势若雷霆，{target}胸腔剧震，面色苍白！",
+      "connective_phrases": ["刹那间", "只见"]
+    },
+    {
+      "id": "crit_generic_02",
+      "narrative_type": "暴击",
+      "conditions": { "hit": true, "critical": true },
+      "template": "{attacker}真力透骨，【{skill}】{tier_name}轰然落下，{target}猝不及防，几失立足！",
+      "connective_phrases": ["只见", "霎时间"]
+    },
+    {
+      "id": "defend_generic_02",
+      "narrative_type": "抵挡",
+      "conditions": { "hit": true, "critical": false },
+      "template": "{target}一引一封，劲力回化，任{attacker}狂势消于无形。",
+      "connective_phrases": ["紧接着", "随即"]
+    }
+  ]
+}

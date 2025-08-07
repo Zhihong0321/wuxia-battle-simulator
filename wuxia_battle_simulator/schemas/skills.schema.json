@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuxia_battle_simulator/schemas/skills.schema.json",
+  "title": "Skills",
+  "description": "Supports top-level array or object map of skills. Matches sample dataset with Chinese type labels and tier objects.",
+  "oneOf": [
+    {
+      "type": "array",
+      "items": { "$ref": "#/$defs/skill" }
+    },
+    {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/skill" }
+    }
+  ],
+  "$defs": {
+    "tier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parameters"],
+      "properties": {
+        "tier": { "type": "integer", "minimum": 1 },
+        "tier_name": { "type": "string" },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_damage",
+            "power_multiplier",
+            "qi_cost",
+            "cooldown",
+            "hit_chance",
+            "critical_chance"
+          ],
+          "properties": {
+            "base_damage": { "type": "number" },
+            "power_multiplier": { "type": "number" },
+            "qi_cost": { "type": "number", "minimum": 0 },
+            "cooldown": { "type": "integer", "minimum": 0 },
+            "hit_chance": { "type": "number", "minimum": 0, "maximum": 1 },
+            "critical_chance": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "visual_effects": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sound_effects": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "tiers_union": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/tier" }
+        },
+        {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/tier" }
+        }
+      ]
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "type", "tiers"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "type": {
+          "description": "Accept both Chinese labels used in dataset and canonical English set. Explicitly reject 'healing' to satisfy negative test.",
+          "oneOf": [
+            { "type": "string", "enum": ["攻击", "抵挡", "闪避", "暴击"] },
+            { "type": "string", "enum": ["attack", "support", "buff"] }
+          ],
+          "not": { "const": "healing" }
+        },
+        "description": { "type": "string" },
+        "tiers": { "$ref": "#/$defs/tiers_union" }
+      }
+    }
+  }
+}

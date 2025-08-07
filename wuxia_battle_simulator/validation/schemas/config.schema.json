@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Config",
+  "type": "object",
+  "properties": {
+    "rng_seed": { "type": "integer" },
+    "atb_threshold": { "type": "integer", "minimum": 1, "default": 100 },
+    "atb_tick_scale": { "type": "number", "minimum": 0, "default": 1.0 },
+    "ui": {
+      "type": "object",
+      "properties": {
+        "speed": { "type": "number", "minimum": 0.1, "default": 1.0 },
+        "theme": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
