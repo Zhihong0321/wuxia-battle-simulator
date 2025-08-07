@@ -51,6 +51,39 @@
               "additionalProperties": false
             }
           },
+          "equipped_skills": {
+            "type": "object",
+            "properties": {
+              "attack": {
+                "type": "object",
+                "properties": {
+                  "skill_id": { "type": "string", "minLength": 1 },
+                  "tier": { "type": "integer", "minimum": 1 }
+                },
+                "required": ["skill_id", "tier"],
+                "additionalProperties": false
+              },
+              "defense": {
+                "type": "object",
+                "properties": {
+                  "skill_id": { "type": "string", "minLength": 1 },
+                  "tier": { "type": "integer", "minimum": 1 }
+                },
+                "required": ["skill_id", "tier"],
+                "additionalProperties": false
+              },
+              "movement": {
+                "type": "object",
+                "properties": {
+                  "skill_id": { "type": "string", "minLength": 1 },
+                  "tier": { "type": "integer", "minimum": 1 }
+                },
+                "required": ["skill_id", "tier"],
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
           "personality_traits": {
             "type": "array",
             "items": { "type": "string" }

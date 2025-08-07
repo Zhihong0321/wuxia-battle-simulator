@@ -11,7 +11,7 @@ Principles
 
 Repository structure
 - wuxia_battle_simulator/
-  - engine/: ATBClock, BattleSimulator, GameState, AI
+  - engine/: ATBClock, BattleEngine with processor pipeline, GameState, AI
   - narrator/: TextNarrator, VariableResolver
   - utils/: DataManager, TemplateEngine, logger
   - validation/: schemas and Validator

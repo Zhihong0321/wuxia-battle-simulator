@@ -565,9 +565,8 @@ class CharacterEditorView(ttk.Frame):
         toolbar = ttk.Frame(self)
         toolbar.pack(fill="x", padx=8, pady=6)
         ttk.Button(toolbar, text="New", command=self.new_character).pack(side="left")
-        ttk.Button(toolbar, text="Save", command=self.save_current).pack(side="left")
         ttk.Button(toolbar, text="Delete", command=self.delete_current).pack(side="left")
-        ttk.Button(toolbar, text="Save to JSON", command=self.save_to_json).pack(side="left")
+        ttk.Button(toolbar, text="Save", command=self.save_to_json).pack(side="left")
 
         body = ttk.Frame(self)
         body.pack(fill="both", expand=True, padx=8, pady=6)
@@ -594,7 +593,26 @@ class CharacterEditorView(ttk.Frame):
         ttk.Label(form, text="Agility").grid(row=5, column=2, sticky="e"); self.agi_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=9999, textvariable=self.agi_var, width=8).grid(row=5, column=3, sticky="w")
         ttk.Label(form, text="Defense").grid(row=5, column=4, sticky="e"); self.def_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=9999, textvariable=self.def_var, width=8).grid(row=5, column=5, sticky="w")
         # Skills
-        ttk.Label(form, text="Skills (skill_id:tier, comma-separated)").grid(row=6, column=0, sticky="e"); self.skills_var = tk.StringVar(); ttk.Entry(form, textvariable=self.skills_var, width=40).grid(row=6, column=1, columnspan=5, sticky="w")
+        ttk.Label(form, text="Skills (skill_id:tier, comma-separated)").grid(row=6, column=0, sticky="e")
+        self.skills_var = tk.StringVar()
+        self.skills_var.trace('w', self._on_skills_changed)
+        ttk.Entry(form, textvariable=self.skills_var, width=40).grid(row=6, column=1, columnspan=5, sticky="w")
+        
+        # Equipped Skills
+        ttk.Label(form, text="Equipped Attack Skill").grid(row=7, column=0, sticky="e")
+        self.equipped_attack_var = tk.StringVar()
+        self.equipped_attack_combo = ttk.Combobox(form, textvariable=self.equipped_attack_var, width=25, state="readonly")
+        self.equipped_attack_combo.grid(row=7, column=1, columnspan=2, sticky="w")
+        
+        ttk.Label(form, text="Equipped Defense Skill").grid(row=8, column=0, sticky="e")
+        self.equipped_defense_var = tk.StringVar()
+        self.equipped_defense_combo = ttk.Combobox(form, textvariable=self.equipped_defense_var, width=25, state="readonly")
+        self.equipped_defense_combo.grid(row=8, column=1, columnspan=2, sticky="w")
+        
+        ttk.Label(form, text="Equipped Movement Skill").grid(row=9, column=0, sticky="e")
+        self.equipped_movement_var = tk.StringVar()
+        self.equipped_movement_combo = ttk.Combobox(form, textvariable=self.equipped_movement_var, width=25, state="readonly")
+        self.equipped_movement_combo.grid(row=9, column=1, columnspan=2, sticky="w")
 
         self.refresh_list()
 
@@ -619,9 +637,89 @@ class CharacterEditorView(ttk.Frame):
         self.str_var.set(int(stats.get("strength", 10)))
         self.agi_var.set(int(stats.get("agility", 10)))
         self.def_var.set(int(stats.get("defense", 10)))
-        # serialize equipped skills
+        # serialize learned skills
         skills = ch.get("skills", [])
         self.skills_var.set(",".join(f"{s.get('skill_id')}:{int(s.get('tier',1))}" for s in skills if s.get("skill_id")))
+        
+        # Update equipped skills comboboxes
+        self._update_equipped_skills_combos(ch)
+
+    def _update_equipped_skills_combos(self, ch):
+        """Update equipped skills comboboxes based on character's learned skills and available skills"""
+        # Get character's learned skills
+        learned_skills = ch.get("skills", [])
+        
+        # Create filtered skill options by type
+        attack_options = [""]
+        defense_options = [""]
+        movement_options = [""]
+        
+        for skill in learned_skills:
+            skill_id = skill.get("skill_id")
+            tier = skill.get("tier", 1)
+            if skill_id and hasattr(self.app, 'skills'):
+                try:
+                    skill_name = self.app.skills.get_skill_name(skill_id)
+                    skill_type = self.app.skills.get_skill_type(skill_id)
+                    display_text = f"{skill_name} (T{tier}) - {skill_id}"
+                    
+                    # Filter by skill type - map Chinese types to English categories
+                    if skill_type in ["攻击", "attack"]:
+                        attack_options.append(display_text)
+                    elif skill_type in ["抵挡", "defense"]:
+                        defense_options.append(display_text)
+                    elif skill_type in ["闪避", "movement"]:
+                        movement_options.append(display_text)
+                    elif skill_type in ["暴击"]:
+                        # Critical skills can be equipped as attack skills
+                        attack_options.append(display_text)
+                except:
+                    # If we can't get skill info, add to all categories as fallback
+                    display_text = f"{skill_id} (T{tier})"
+                    attack_options.append(display_text)
+                    defense_options.append(display_text)
+                    movement_options.append(display_text)
+        
+        # Update combobox values with filtered options
+        self.equipped_attack_combo['values'] = attack_options
+        self.equipped_defense_combo['values'] = defense_options
+        self.equipped_movement_combo['values'] = movement_options
+        
+        # Set current equipped skills
+        equipped_skills = ch.get("equipped_skills", {})
+        
+        # Set attack skill
+        attack_skill = equipped_skills.get("attack", {})
+        if attack_skill.get("skill_id"):
+            attack_display = self._find_skill_display(attack_skill, attack_options)
+            self.equipped_attack_var.set(attack_display)
+        else:
+            self.equipped_attack_var.set("")
+            
+        # Set defense skill
+        defense_skill = equipped_skills.get("defense", {})
+        if defense_skill.get("skill_id"):
+            defense_display = self._find_skill_display(defense_skill, defense_options)
+            self.equipped_defense_var.set(defense_display)
+        else:
+            self.equipped_defense_var.set("")
+            
+        # Set movement skill
+        movement_skill = equipped_skills.get("movement", {})
+        if movement_skill.get("skill_id"):
+            movement_display = self._find_skill_display(movement_skill, movement_options)
+            self.equipped_movement_var.set(movement_display)
+        else:
+            self.equipped_movement_var.set("")
+    
+    def _find_skill_display(self, skill_data, skill_options):
+        """Find the display string for a skill in the options list"""
+        skill_id = skill_data.get("skill_id")
+        tier = skill_data.get("tier", 1)
+        for option in skill_options:
+            if f"T{tier}) - {skill_id}" in option:
+                return option
+        return ""
 
     def _collect_form(self):
         skills_txt = self.skills_var.get().strip()
@@ -633,6 +731,43 @@ class CharacterEditorView(ttk.Frame):
                     skills.append({"skill_id": sid.strip(), "tier": int(tier)})
                 except Exception:
                     pass
+        
+        # Parse equipped skills from comboboxes
+        equipped_skills = {}
+        
+        # Parse attack skill
+        attack_selection = self.equipped_attack_var.get().strip()
+        if attack_selection and " - " in attack_selection:
+            skill_id = attack_selection.split(" - ")[-1]
+            tier_part = attack_selection.split("(T")[1].split(")")[0] if "(T" in attack_selection else "1"
+            try:
+                tier = int(tier_part)
+                equipped_skills["attack"] = {"skill_id": skill_id, "tier": tier}
+            except:
+                pass
+        
+        # Parse defense skill
+        defense_selection = self.equipped_defense_var.get().strip()
+        if defense_selection and " - " in defense_selection:
+            skill_id = defense_selection.split(" - ")[-1]
+            tier_part = defense_selection.split("(T")[1].split(")")[0] if "(T" in defense_selection else "1"
+            try:
+                tier = int(tier_part)
+                equipped_skills["defense"] = {"skill_id": skill_id, "tier": tier}
+            except:
+                pass
+        
+        # Parse movement skill
+        movement_selection = self.equipped_movement_var.get().strip()
+        if movement_selection and " - " in movement_selection:
+            skill_id = movement_selection.split(" - ")[-1]
+            tier_part = movement_selection.split("(T")[1].split(")")[0] if "(T" in movement_selection else "1"
+            try:
+                tier = int(tier_part)
+                equipped_skills["movement"] = {"skill_id": skill_id, "tier": tier}
+            except:
+                pass
+        
         # Build schema-compliant character dict
         stats = {
             "hp": int(self.hp_var.get()),
@@ -643,13 +778,26 @@ class CharacterEditorView(ttk.Frame):
             "agility": int(self.agi_var.get()),
             "defense": int(self.def_var.get()),
         }
-        return {
+        
+        character_data = {
             "id": self.id_var.get().strip(),
             "name": self.name_var.get().strip(),
             "faction": self.faction_var.get().strip(),
             "stats": stats,
             "skills": skills
         }
+        
+        # Add equipped_skills only if there are any equipped skills
+        if equipped_skills:
+            character_data["equipped_skills"] = equipped_skills
+            
+        return character_data
+
+    def _on_skills_changed(self, *args):
+        """Called when the skills field changes to update equipped skills combos"""
+        # Get current character data from form to update combos
+        current_char = self._collect_form()
+        self._update_equipped_skills_combos(current_char)
 
     def new_character(self):
         new = {
@@ -657,7 +805,8 @@ class CharacterEditorView(ttk.Frame):
             "name":"新角色",
             "faction":"",
             "stats":{"hp":100,"max_hp":100,"qi":100,"max_qi":100,"strength":10,"agility":10,"defense":10},
-            "skills":[]
+            "skills":[],
+            "equipped_skills":{}
         }
         self.app.characters.append(new)
         self.refresh_list()
@@ -677,14 +826,28 @@ class CharacterEditorView(ttk.Frame):
         self.refresh_list()
 
     def save_to_json(self):
-        # persist to characters.json with validation
+        # First update in-memory data, then persist to characters.json with validation
         try:
+            # Update in-memory data first
+            self.save_current()
+            
+            # Save current selection to restore after reload
+            current_selection = self.listbox.curselection()
+            selected_index = current_selection[0] if current_selection else None
+            
             payload = {"characters": self.app.characters} if isinstance(self.app.characters, list) else self.app.characters
             self.app.validator.validate("characters", payload)
             path = os.path.join(self.app.data_dir, "characters.json")
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(payload, f, ensure_ascii=False, indent=2)
             self.app.load_data_dir(self.app.data_dir)
+            
+            # Refresh the list and restore selection
+            self.refresh_list()
+            if selected_index is not None and selected_index < self.listbox.size():
+                self.listbox.selection_set(selected_index)
+                self._load_selected()  # Reload the form with the selected character
+            
             messagebox.showinfo("Saved", "Characters saved.")
         except Exception as e:
             messagebox.showerror("Save Error", str(e))

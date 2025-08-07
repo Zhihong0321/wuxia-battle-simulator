@@ -2,17 +2,16 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "wuxia_battle_simulator/schemas/skills.schema.json",
   "title": "Skills",
-  "description": "Supports top-level array or object map of skills. Matches sample dataset with Chinese type labels and tier objects.",
-  "oneOf": [
-    {
+  "description": "Supports skills wrapper object with skills array. Matches sample dataset with Chinese type labels and tier objects.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["skills"],
+  "properties": {
+    "skills": {
       "type": "array",
       "items": { "$ref": "#/$defs/skill" }
-    },
-    {
-      "type": "object",
-      "additionalProperties": { "$ref": "#/$defs/skill" }
     }
-  ],
+  },
   "$defs": {
     "tier": {
       "type": "object",
@@ -39,7 +38,12 @@
             "qi_cost": { "type": "number", "minimum": 0 },
             "cooldown": { "type": "integer", "minimum": 0 },
             "hit_chance": { "type": "number", "minimum": 0, "maximum": 1 },
-            "critical_chance": { "type": "number", "minimum": 0, "maximum": 1 }
+            "critical_chance": { "type": "number", "minimum": 0, "maximum": 1 },
+            "miss_chance": { "type": "number", "minimum": 0, "maximum": 1, "description": "Chance for movement skill to completely avoid attack" },
+            "partial_miss_chance": { "type": "number", "minimum": 0, "maximum": 1, "description": "Chance for movement skill to partially avoid attack" },
+            "partial_miss_min_reduction": { "type": "number", "minimum": 0, "maximum": 1, "description": "Minimum damage reduction percentage for partial miss" },
+            "partial_miss_max_reduction": { "type": "number", "minimum": 0, "maximum": 1, "description": "Maximum damage reduction percentage for partial miss" },
+            "damage_reduction": { "type": "number", "minimum": 0, "maximum": 1, "description": "Damage reduction percentage for defense skills" }
           }
         },
         "visual_effects": {
@@ -72,10 +76,10 @@
         "id": { "type": "string", "minLength": 1 },
         "name": { "type": "string", "minLength": 1 },
         "type": {
-          "description": "Accept both Chinese labels used in dataset and canonical English set. Explicitly reject 'healing' to satisfy negative test.",
+          "description": "Accept both Chinese labels used in dataset and canonical English set for equipment slots. Explicitly reject 'healing' to satisfy negative test.",
           "oneOf": [
             { "type": "string", "enum": ["攻击", "抵挡", "闪避", "暴击"] },
-            { "type": "string", "enum": ["attack", "support", "buff"] }
+            { "type": "string", "enum": ["attack", "defense", "movement", "critical", "support", "buff"] }
           ],
           "not": { "const": "healing" }
         },

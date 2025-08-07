@@ -20,25 +20,46 @@
         "defense": 10
       },
       "skills": [
-        { "skill_id": "skill_huashan_sword", "tier": 2 },
-        { "skill_id": "skill_counter_parry", "tier": 1 }
+        {
+          "skill_id": "skill_huashan_sword",
+          "tier": 2
+        },
+        {
+          "skill_id": "skill_counter_parry",
+          "tier": 1
+        }
       ],
-      "personality_traits": ["勇猛", "正直"],
+      "equipped_skills": {
+        "attack": {
+          "skill_id": "skill_huashan_sword",
+          "tier": 2
+        },
+        "defense": {
+          "skill_id": "skill_counter_parry",
+          "tier": 1
+        },
+        "movement": {
+          "skill_id": "skill_wudang_dodge",
+          "tier": 1
+        }
+      },
+      "personality_traits": [
+        "勇猛",
+        "正直"
+      ],
       "battle_quotes": {
-        "victory": ["华山剑法，天下第一！"],
-        "defeat": ["今日虽败，他日必报！"]
+        "victory": [
+          "华山剑法，天下第一！"
+        ],
+        "defeat": [
+          "今日虽败，他日必报！"
+        ]
       }
     },
     {
       "id": "char_huashan_2",
       "name": "林青",
-      "level": 9,
       "faction": "华山派",
-      "faction_terminology": {
-        "attack_prefix": "剑招",
-        "defense_prefix": "剑势",
-        "qi_name": "真气"
-      },
       "stats": {
         "hp": 90,
         "max_hp": 90,
@@ -49,13 +70,28 @@
         "defense": 9
       },
       "skills": [
-        { "skill_id": "skill_huashan_sword", "tier": 1 },
-        { "skill_id": "skill_inner_palm", "tier": 1 }
+        {
+          "skill_id": "skill_huashan_sword",
+          "tier": 1
+        },
+        {
+          "skill_id": "skill_inner_palm",
+          "tier": 1
+        },
+        {
+          "skill_id": "skill_counter_parry",
+          "tier": 1
+        }
       ],
-      "personality_traits": ["沉稳", "仁厚"],
-      "battle_quotes": {
-        "victory": ["持剑不乱心，行事须正道。"],
-        "defeat": ["剑不离手，心不离道。"]
+      "equipped_skills": {
+        "attack": {
+          "skill_id": "skill_huashan_sword",
+          "tier": 1
+        },
+        "defense": {
+          "skill_id": "skill_counter_parry",
+          "tier": 1
+        }
       }
     },
     {
@@ -78,14 +114,44 @@
         "defense": 12
       },
       "skills": [
-        { "skill_id": "skill_wudang_sword", "tier": 1 },
-        { "skill_id": "skill_taichi", "tier": 1 },
-        { "skill_id": "skill_wudang_dodge", "tier": 1 }
+        {
+          "skill_id": "skill_wudang_sword",
+          "tier": 1
+        },
+        {
+          "skill_id": "skill_taichi",
+          "tier": 1
+        },
+        {
+          "skill_id": "skill_wudang_dodge",
+          "tier": 1
+        }
       ],
-      "personality_traits": ["温厚", "果决"],
+      "equipped_skills": {
+        "attack": {
+          "skill_id": "skill_wudang_sword",
+          "tier": 1
+        },
+        "defense": {
+          "skill_id": "skill_taichi",
+          "tier": 1
+        },
+        "movement": {
+          "skill_id": "skill_wudang_dodge",
+          "tier": 1
+        }
+      },
+      "personality_traits": [
+        "温厚",
+        "果决"
+      ],
       "battle_quotes": {
-        "victory": ["太极之道，后发先至。"],
-        "defeat": ["有失先机，尚可回旋。"]
+        "victory": [
+          "太极之道，后发先至。"
+        ],
+        "defeat": [
+          "有失先机，尚可回旋。"
+        ]
       }
     },
     {
@@ -108,13 +174,40 @@
         "defense": 11
       },
       "skills": [
-        { "skill_id": "skill_wudang_sword", "tier": 1 },
-        { "skill_id": "skill_counter_parry", "tier": 1 }
+        {
+          "skill_id": "skill_wudang_sword",
+          "tier": 1
+        },
+        {
+          "skill_id": "skill_counter_parry",
+          "tier": 1
+        }
       ],
-      "personality_traits": ["谨慎", "好胜"],
+      "equipped_skills": {
+        "attack": {
+          "skill_id": "skill_wudang_sword",
+          "tier": 1
+        },
+        "defense": {
+          "skill_id": "skill_counter_parry",
+          "tier": 1
+        },
+        "movement": {
+          "skill_id": "skill_wudang_dodge",
+          "tier": 1
+        }
+      },
+      "personality_traits": [
+        "谨慎",
+        "好胜"
+      ],
       "battle_quotes": {
-        "victory": ["以柔克刚，剑随心至。"],
-        "defeat": ["心急失衡，需再磨砺。"]
+        "victory": [
+          "以柔克刚，剑随心至。"
+        ],
+        "defeat": [
+          "心急失衡，需再磨砺。"
+        ]
       }
     }
   ]

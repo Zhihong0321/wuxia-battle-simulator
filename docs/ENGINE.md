@@ -1,6 +1,6 @@
-# Engine: ATB, Simulator, AI, GameState
+# Engine: ATB, Battle Processor Pipeline, AI, GameState
 
-This document describes the combat engine: timing model, state, action selection, damage, and event emission.
+This document describes the combat engine: timing model, modular battle processing pipeline, state management, action selection, damage calculation, and event emission.
 
 Determinism
 - Single RNG: A Python random.Random seeded by user input drives all stochastic behavior (hit, crit, narration selection).
@@ -46,26 +46,33 @@ AI: HeuristicAI
   4. Pick a target (typically the lowest HP opponent).
   5. Return (skill_id, target_id, tier). If none viable, the actor may pass (no-op) and the loop continues.
 
-BattleSimulator
-- Constructor: BattleSimulator(state, ai, clock, rng).
-- step():
-  1. Sync ATB and select next actor.
-  2. Turn start: decrement cooldowns for the acting actor.
-  3. Ask AI to choose action (skill_id, target_id, tier). If none, produce a no-op event if needed and continue.
-  4. Compute damage:
-     - Sample hit/miss via hit_chance.
-     - If hit, sample critical via crit_chance; apply crit multiplier if present.
-     - Apply damage buckets (e.g., high/medium/low) for narration.
-     - Deduct qi cost and set cooldown.
-     - Update target HP.
-  5. Emit a BattleEvent with attacker, target, skill_id, tier, hit/crit flags, damage amount, bucket labels, and any auxiliary data.
-- run_to_completion(): Loop step() until is_battle_over() returns True or max-iteration guard trips.
-- map_event_for_narration(ev): Returns a context dict used by Narrator. Includes:
-  - narrative_type (Chinese label: 攻击/抵挡/闪避/暴击)
-  - attacker/target names
-  - skill name and tier name (resolved through SkillDB)
-  - flags: hit, critical
-  - damage_amount, damage_percent (bucket)
+Battle Processor Pipeline
+- Constructor: BattleEngine(state, ai, clock, rng, processor_registry).
+- Modular Architecture:
+  - BattleContext: Carries all battle data through the processing pipeline (state, current actor, action, damage results, events, etc.)
+  - StepProcessor Interface: Common interface for all battle processing steps with process(context) method
+  - ProcessorPipeline: Executes registered processors in sequence, handling errors and conditional execution
+  - ProcessorRegistry: Manages processor configuration and allows runtime modification of the pipeline
+
+- Core Processors:
+  1. ATBProcessor: Syncs ATB clock and selects next actor
+  2. AIDecisionProcessor: Asks AI to choose action (skill_id, target_id, tier)
+  3. ResourceValidationProcessor: Validates qi costs and cooldowns
+  4. MovementSkillProcessor: Handles target's movement/dodge skills (miss_chance, partial_miss)
+  5. DefenseSkillProcessor: Handles target's defense skills (damage reduction, counter-attacks)
+  6. DamageCalculationProcessor: Computes final damage with hit/miss, critical hits, damage buckets
+  7. StateUpdateProcessor: Updates HP, qi, cooldowns, and game state
+  8. EventGenerationProcessor: Creates BattleEvent objects for narration
+
+- step(): Executes the processor pipeline with current BattleContext, returns List[BattleEvent]
+- run_to_completion(): Loop step() until is_battle_over() returns True or max-iteration guard trips
+- map_event_for_narration(ev): Returns a context dict used by Narrator (unchanged interface)
+
+- Processor Modification Guidelines:
+  - To add new battle mechanics: Create new processor implementing StepProcessor interface
+  - To modify battle flow: Update ProcessorRegistry configuration
+  - To disable features: Remove processor from registry or add conditional logic
+  - To debug: Enable processor-level logging and use BattleContext.processing_log
 
 Event Model
 - BattleEvent fields (typical):

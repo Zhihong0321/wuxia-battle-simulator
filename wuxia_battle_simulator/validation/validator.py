@@ -109,7 +109,9 @@ class Validator:
 
         # If caller wrapped payload inside a top-level key (e.g., {"characters": [...]})
         # but the schema expects an array at root, unwrap when it matches the logical key.
-        if isinstance(data, dict) and key in mapping and key in data and isinstance(data[key], (list, dict)):
+        # Only unwrap if the schema's root type is 'array', not 'object'
+        if (isinstance(data, dict) and key in mapping and key in data and 
+            isinstance(data[key], (list, dict)) and spec.schema.get('type') == 'array'):
             data = data[key]
 
         validator_cls = _validator_for(spec.schema)  # type: ignore

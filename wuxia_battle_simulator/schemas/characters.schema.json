@@ -38,11 +38,6 @@
           "defense": { "type": "integer", "minimum": 0 }
         }
       },
-      "strength": { "type": "integer", "minimum": 0 },
-      "defense": { "type": "integer", "minimum": 0 },
-      "agility": { "type": "integer", "minimum": 0 },
-      "qi": { "type": "integer", "minimum": 0 },
-      "max_hp": { "type": "integer", "minimum": 1 },
       "skills": {
         "type": "array",
         "items": {
@@ -70,6 +65,39 @@
         "properties": {
           "victory": { "type": "array", "items": { "type": "string" } },
           "defeat": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "equipped_skills": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attack": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["skill_id", "tier"],
+            "properties": {
+              "skill_id": { "type": "string", "minLength": 1 },
+              "tier": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "defense": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["skill_id", "tier"],
+            "properties": {
+              "skill_id": { "type": "string", "minLength": 1 },
+              "tier": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "movement": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["skill_id", "tier"],
+            "properties": {
+              "skill_id": { "type": "string", "minLength": 1 },
+              "tier": { "type": "integer", "minimum": 1 }
+            }
+          }
         }
       },
       "strength": { "type": "integer", "minimum": 0 },

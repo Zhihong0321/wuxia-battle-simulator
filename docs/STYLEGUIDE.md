@@ -5,7 +5,7 @@ This guide codifies conventions for code, data, and documentation to keep the Wu
 Coding (Python)
 - Version: Target Python 3.10+
 - Imports:
-  - Absolute imports within the package: from wuxia_battle_simulator.engine.battle_simulator import BattleSimulator
+  - Absolute imports within the package: from wuxia_battle_simulator.engine.battle_engine import BattleEngine
   - Group stdlib, third-party, then local
 - Types:
   - Use type hints for public functions/classes
@@ -78,7 +78,7 @@ PR hygiene
 
 Examples
 - Engine method signatures:
-  - BattleSimulator(state, ai, clock, rng)
+  - BattleEngine(state, ai, clock, rng, processor_registry)
   - TextNarrator(index, rng, template_engine)
 - Good:
   def select_action(self, actor, state) -> Optional[Tuple[str, str, int]]

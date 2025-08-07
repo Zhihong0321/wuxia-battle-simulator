@@ -9,8 +9,8 @@ Goals
 - Two playback modes for UX: all-at-once and progressive
 
 Data flow
-1) BattleSimulator emits BattleEvent objects with enough detail (attacker, target, skill, tier, hit/crit, damage, buckets).
-2) simulator.map_event_for_narration(ev) converts BattleEvent into a context dict, including:
+1) BattleEngine emits BattleEvent objects with enough detail (attacker, target, skill, tier, hit/crit, damage, buckets).
+2) battle_engine.map_event_for_narration(ev) converts BattleEvent into a context dict, including:
    - narrative_type: 攻击, 闪避, 抵挡, 暴击
    - names: attacker, target, skill, tier_name
    - flags: hit, critical
@@ -43,9 +43,9 @@ Template Rendering
 
 Finish vs Progressive mode (GUI)
 - Finish mode:
-  - The simulator runs to completion; all events are rendered immediately into the commentary box.
+  - The battle engine runs to completion; all events are rendered immediately into the commentary box.
 - Progressive mode:
-  - The simulator still computes the full event list deterministically.
+  - The battle engine still computes the full event list deterministically.
   - The GUI schedules each narration line with Tk after() according to the user-configured delay (default 0.5s per event).
   - The HP status lines for Team A/B update after each scheduled event to visualize health changes over time.
 

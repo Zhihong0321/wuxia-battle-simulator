@@ -5,7 +5,7 @@ from typing import Dict, Any, List
 from wuxia_battle_simulator.validation.validator import Validator, ValidationError
 from wuxia_battle_simulator.utils.logger import get_logger
 from wuxia_battle_simulator.engine.game_state import Stats, EquippedSkill, CharacterState, GameState
-from wuxia_battle_simulator.engine.ai_policy import _SkillTierParams as AITierParams  # reuse structure interface
+from wuxia_battle_simulator.engine.battle_simulator import _SkillTierParams as AITierParams  # reuse structure interface
 
 
 class SkillTier:
@@ -48,6 +48,11 @@ class SkillDB:
             cooldown=int(p.get("cooldown", 0)),
             hit_chance=float(p.get("hit_chance", 1.0)),
             critical_chance=float(p.get("critical_chance", 0.0)),
+            miss_chance=float(p.get("miss_chance", 0.0)),
+            partial_miss_chance=float(p.get("partial_miss_chance", 0.0)),
+            partial_miss_min_reduction=float(p.get("partial_miss_min_reduction", 0.0)),
+            partial_miss_max_reduction=float(p.get("partial_miss_max_reduction", 0.0)),
+            damage_reduction=float(p.get("damage_reduction", 0.0)),
         )
         # attach effects and narrative template for narrator mapping if available
         setattr(params, "visual_effects", st.visual_effects)
@@ -153,7 +158,38 @@ class DataManager:
             )
             hp = int(c["stats"].get("hp", stats.max_hp))
             qi = int(c["stats"].get("qi", stats.max_qi))
-            skills = [EquippedSkill(skill_id=s["skill_id"], tier=int(s.get("tier", 1))) for s in c.get("skills", [])]
+            # Load equipped skills instead of all learned skills
+            equipped_skills = []
+            equipped_skills_data = c.get("equipped_skills", {})
+            
+            # Add equipped attack skill
+            if "attack" in equipped_skills_data:
+                attack_skill = equipped_skills_data["attack"]
+                equipped_skills.append(EquippedSkill(
+                    skill_id=attack_skill["skill_id"], 
+                    tier=int(attack_skill.get("tier", 1))
+                ))
+            
+            # Add equipped defense skill
+            if "defense" in equipped_skills_data:
+                defense_skill = equipped_skills_data["defense"]
+                equipped_skills.append(EquippedSkill(
+                    skill_id=defense_skill["skill_id"], 
+                    tier=int(defense_skill.get("tier", 1))
+                ))
+            
+            # Add equipped movement skill
+            if "movement" in equipped_skills_data:
+                movement_skill = equipped_skills_data["movement"]
+                equipped_skills.append(EquippedSkill(
+                    skill_id=movement_skill["skill_id"], 
+                    tier=int(movement_skill.get("tier", 1))
+                ))
+            
+            # Fallback: if no equipped skills, use learned skills for backward compatibility
+            if not equipped_skills:
+                equipped_skills = [EquippedSkill(skill_id=s["skill_id"], tier=int(s.get("tier", 1))) for s in c.get("skills", [])]
+            
             cs = CharacterState(
                 id=c["id"],
                 name=c.get("name", c["id"]),
@@ -163,7 +199,7 @@ class DataManager:
                 hp=hp,
                 qi=qi,
                 cooldowns={},
-                skills=skills,
+                skills=equipped_skills,
                 time_units=0.0
             )
             chars.append(cs)

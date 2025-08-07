@@ -65,7 +65,8 @@
             "qi_cost": 5,
             "cooldown": 1,
             "hit_chance": 0.7,
-            "critical_chance": 0.05
+            "critical_chance": 0.05,
+            "damage_reduction": 0.35
           },
           "visual_effects": [
             "太极图影"
@@ -128,26 +129,23 @@
       "id": "skill_wudang_dodge",
       "name": "武当身法",
       "type": "闪避",
-      "description": "身随步转，如行云流水",
       "tiers": [
         {
           "tier": 1,
-          "tier_name": "身随意动",
           "parameters": {
             "base_damage": 0,
             "power_multiplier": 0.0,
             "qi_cost": 0,
             "cooldown": 1,
-            "hit_chance": 0.0,
-            "critical_chance": 0.0
+            "hit_chance": 0.7,
+            "critical_chance": 0.0,
+            "miss_chance": 0.25,
+            "partial_miss_chance": 0.35,
+            "partial_miss_min_reduction": 0.2,
+            "partial_miss_max_reduction": 0.4
           },
-          "visual_effects": [
-            "残影"
-          ],
-          "sound_effects": [
-            "衣袂声"
-          ],
-          "narrative_template": "{attacker}足踏轻灵步，【{skill}】{tier_name}身形一晃，避开{target}来招。"
+          "tier_name": "身随意动",
+          "narrative_template": "{defender}足踏轻灵步，【{skill}】{tier_name}身形一晃，尝试避开{attacker}来招。"
         }
       ]
     },
@@ -240,7 +238,8 @@
             "qi_cost": 5,
             "cooldown": 1,
             "hit_chance": 0.7,
-            "critical_chance": 0.05
+            "critical_chance": 0.05,
+            "damage_reduction": 0.42
           },
           "visual_effects": [
             "太极纹"
@@ -248,7 +247,7 @@
           "sound_effects": [
             "闷响"
           ],
-          "narrative_template": "{attacker}四两拨千斤，【{skill}】{tier_name}借势一引，将{target}劲力反送回去！"
+          "narrative_template": "{defender}四两拨千斤，【{skill}】{tier_name}借势一引，化解{attacker}的攻势！"
         }
       ]
     }

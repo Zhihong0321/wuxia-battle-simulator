@@ -1,6 +1,6 @@
 # Testing
 
-This guide describes how to validate correctness, determinism, and data contracts in the Wuxia Battle Simulator.
+This guide describes how to validate correctness, determinism, and data contracts in the Wuxia Battle Engine.
 
 Test philosophy
 - Deterministic: The same datasets and seed must produce identical outputs.
@@ -68,10 +68,13 @@ Deterministic replay checks
 
 Suggested structure
 - tests/
-  - engine/test_atb.py
-  - engine/test_ai.py
-  - engine/test_damage.py
-  - engine/test_state.py
+  - engine/test_battle_engine.py
+  - engine/processors/test_atb_processor.py
+  - engine/processors/test_ai_processor.py
+  - engine/processors/test_damage_processor.py
+  - engine/processors/test_state_processor.py
+  - engine/test_processor_pipeline.py
+  - engine/test_battle_context.py
   - narrator/test_mapping.py
   - narrator/test_templates.py
   - narrator/test_precedence.py

@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap outlines near-term improvements and longer-term directions for the Wuxia Battle Simulator. It is designed to help new contributors and AI agents pick up tasks safely.
+This roadmap outlines near-term improvements and longer-term directions for the Wuxia Battle Engine. It is designed to help new contributors and AI agents pick up tasks safely.
 
 Near-term (MVP+)
 - Testing and determinism
@@ -17,9 +17,10 @@ Near-term (MVP+)
   - Finalize negative-case tests in schemas (invalid types, comparators, missing fields)
   - Add optional fields for traits and resistances with clear engine interpretation
 - Engine extensions (safe + incremental)
-  - Add “defend” and “wait” actions; reduce incoming damage or adjust ATB gain
+  - Add new processors for "defend" and "wait" actions; reduce incoming damage or adjust ATB gain
   - Expose per-skill crit multipliers and damage formulas via data
   - Emit structured events for misses, blocks, counters (narration-ready)
+  - Add processor configuration options for different battle modes
 
 Mid-term
 - Status effects

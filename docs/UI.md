@@ -6,7 +6,7 @@ Launch
 - python -m wuxia_battle_simulator.ui.run_ui
 
 Tabs and layout
-- Battle Simulator
+- Battle Engine
   - Controls:
     - RNG Seed: integer seed for deterministic runs
     - Narrator: Finish or Progressive
@@ -38,10 +38,10 @@ Editors menu
 
 Narration modes
 - Finish Mode:
-  - Simulator runs to completion; all events are rendered immediately
+  - Battle engine runs to completion; all events are rendered immediately
   - Live HP status lines update after rendering events
 - Progressive Mode:
-  - Simulator computes the full event list deterministically
+  - Battle engine computes the full event list deterministically
   - The UI schedules one line at a time using Tk after() with the configured delay
   - HP status updates after each scheduled event
   - At the end, a summary line (winner / all down / stalemate) is printed and HP status is updated

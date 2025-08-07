@@ -19,11 +19,11 @@ Quick start
   - python -m wuxia_battle_simulator.ui.run_ui
 
 Project layout
-- wuxia_battle_simulator/engine: ATB, simulator, AI, game state
+- wuxia_battle_simulator/engine: ATB, battle engine with processor pipeline, AI, game state
 - wuxia_battle_simulator/narrator: TextNarrator and variable resolver
 - wuxia_battle_simulator/utils: DataManager/loader, TemplateEngine, logger
 - wuxia_battle_simulator/validation: JSON Schema validator
-- wuxia_battle_simulator/ui: Tkinter GUI (Battle Simulator, Editors)
+- wuxia_battle_simulator/ui: Tkinter GUI (Battle Engine, Editors)
 - docs: Documentation suite
 
 Key design choices
