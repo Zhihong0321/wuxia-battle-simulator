@@ -218,6 +218,7 @@ class BattleSimulator:
         """
         Provide a context dict for narrator with Chinese narrative_type mapping handled externally.
         Includes commonly referenced fields for templates: attacker, target, skill, tier_name, etc.
+        Additionally exposes per-skill, per-tier narrative_template if defined in SkillDB.
         """
         # Try to obtain skill/tier names where available
         skills_db = getattr(self.ai, "_skills", None)
@@ -226,16 +227,18 @@ class BattleSimulator:
         tier_name = ""
         visual_effects = []
         sound_effects = []
+        narrative_template = ""
         skill_type = "攻击"
         if skills_db and ev.skill_id and ev.skill_tier:
             try:
                 skill_name = skills_db.get_skill_name(ev.skill_id)
                 tier_name = skills_db.get_tier_name(ev.skill_id, ev.skill_tier)
                 skill_type = skills_db.get_skill_type(ev.skill_id)
-                # Optional: expose effects arrays if present in DB
+                # Optional: expose effects arrays and tier narrative if present in DB
                 p = skills_db.get_tier_params(ev.skill_id, ev.skill_tier)
                 visual_effects = getattr(p, "visual_effects", []) if hasattr(p, "visual_effects") else []
                 sound_effects = getattr(p, "sound_effects", []) if hasattr(p, "sound_effects") else []
+                narrative_template = getattr(p, "narrative_template", "") if hasattr(p, "narrative_template") else ""
             except Exception:
                 pass
 
@@ -263,6 +266,8 @@ class BattleSimulator:
             "critical": ev.outcome == "critical",
             "damage_percent": ev.damage_percent,
             "actor_faction": actor.faction,
-            "target_faction": target.faction if target else ""
+            "target_faction": target.faction if target else "",
+            # New: per-tier narrative text
+            "tier_narrative_template": narrative_template,
         }
         return context

@@ -78,6 +78,12 @@ Security and safety
 - Do not execute untrusted templates; VariableResolver and TemplateEngine must remain safe (no eval).
 - Keep editors restrictive and validated to prevent corrupt datasets.
 
+Recent Changes
+- Per-tier narrative templates: Each skill tier now requires narrative_template in skills.json. Narrator prioritizes this over templates.json and appends a fixed 【暴击！】 tag on critical hits.
+- Skills Editor overhaul: Replaced free-form tiers text with a Treeview grid. Added validators, inline cell editing, and a modal multiline editor for narrative_template. Save persists immediately and reloads SkillDB.
+- Characters Editor fields: Expanded stats to hp, max_hp, qi, max_qi, strength, agility, defense. Saves validate against schema and persist to characters.json.
+- Schemas and docs: Updated docs/DATA-SCHEMAS.md, docs/NARRATOR.md, docs/UI.md, docs/TESTING.md to reflect the above; runtime validator targets Draft-07.
+
 License
 - Add or update the project license if needed (MIT recommended for open collaboration).
 

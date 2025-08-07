@@ -10,12 +10,13 @@ from wuxia_battle_simulator.engine.ai_policy import _SkillTierParams as AITierPa
 
 class SkillTier:
     def __init__(self, tier: int, tier_name: str, parameters: Dict[str, Any],
-                 visual_effects: List[str], sound_effects: List[str]) -> None:
+                 visual_effects: List[str], sound_effects: List[str], narrative_template: str = "") -> None:
         self.tier = tier
         self.tier_name = tier_name
         self.parameters = parameters
         self.visual_effects = visual_effects
         self.sound_effects = sound_effects
+        self.narrative_template = narrative_template
 
 
 class SkillDef:
@@ -48,9 +49,11 @@ class SkillDB:
             hit_chance=float(p.get("hit_chance", 1.0)),
             critical_chance=float(p.get("critical_chance", 0.0)),
         )
-        # attach effects for narrator mapping if available
+        # attach effects and narrative template for narrator mapping if available
         setattr(params, "visual_effects", st.visual_effects)
         setattr(params, "sound_effects", st.sound_effects)
+        setattr(params, "narrative_template", getattr(st, "narrative_template", ""))
+        setattr(params, "tier_name", st.tier_name)
         return params
 
     def get_tier_name(self, skill_id: str, tier: int) -> str:
@@ -116,6 +119,7 @@ class DataManager:
                         parameters=dict(t.get("parameters", {})),
                         visual_effects=list(t.get("visual_effects", [])),
                         sound_effects=list(t.get("sound_effects", [])),
+                        narrative_template=str(t.get("narrative_template", "")),
                     )
                 )
             sd = SkillDef(

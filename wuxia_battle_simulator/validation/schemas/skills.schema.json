@@ -19,10 +19,11 @@
             "minItems": 1,
             "items": {
               "type": "object",
-              "required": ["tier", "tier_name", "parameters"],
+              "required": ["tier", "tier_name", "parameters", "narrative_template"],
               "properties": {
                 "tier": { "type": "integer", "minimum": 1 },
                 "tier_name": { "type": "string", "minLength": 1 },
+                "narrative_template": { "type": "string", "minLength": 1 },
                 "parameters": {
                   "type": "object",
                   "required": ["base_damage", "power_multiplier", "qi_cost", "cooldown", "hit_chance", "critical_chance"],

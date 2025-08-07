@@ -408,8 +408,9 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Wuxia Battle Simulator - MVP GUI")
-        self.geometry("900x600")
-        self.minsize(900, 600)
+        # Expand default width to 1200px; keep height flexible
+        self.geometry("1200x700")
+        self.minsize(1200, 600)
 
         self.data_dir: Optional[str] = None
         self.characters: List[Dict[str, Any]] = []
@@ -578,14 +579,22 @@ class CharacterEditorView(ttk.Frame):
         form = ttk.Frame(body)
         form.pack(side="left", fill="both", expand=True, padx=(8,0))
 
-        # Basic fields
+        # Basic fields (align with schema: stats requires hp,max_hp,qi,max_qi,strength,agility,defense)
         ttk.Label(form, text="ID").grid(row=0, column=0, sticky="e"); self.id_var = tk.StringVar(); ttk.Entry(form, textvariable=self.id_var, width=40).grid(row=0, column=1, sticky="w")
         ttk.Label(form, text="Name").grid(row=1, column=0, sticky="e"); self.name_var = tk.StringVar(); ttk.Entry(form, textvariable=self.name_var, width=40).grid(row=1, column=1, sticky="w")
         ttk.Label(form, text="Faction").grid(row=2, column=0, sticky="e"); self.faction_var = tk.StringVar(); ttk.Entry(form, textvariable=self.faction_var, width=40).grid(row=2, column=1, sticky="w")
-        ttk.Label(form, text="HP").grid(row=3, column=0, sticky="e"); self.hp_var = tk.IntVar(); ttk.Spinbox(form, from_=1, to=9999, textvariable=self.hp_var, width=8).grid(row=3, column=1, sticky="w")
-        ttk.Label(form, text="QI").grid(row=4, column=0, sticky="e"); self.qi_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=9999, textvariable=self.qi_var, width=8).grid(row=4, column=1, sticky="w")
-        ttk.Label(form, text="Agility").grid(row=5, column=0, sticky="e"); self.agi_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=9999, textvariable=self.agi_var, width=8).grid(row=5, column=1, sticky="w")
-        ttk.Label(form, text="Skills (skill_id:tier, comma-separated)").grid(row=6, column=0, sticky="e"); self.skills_var = tk.StringVar(); ttk.Entry(form, textvariable=self.skills_var, width=40).grid(row=6, column=1, sticky="w")
+        # Stats row 1
+        ttk.Label(form, text="HP").grid(row=3, column=0, sticky="e"); self.hp_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=99999, textvariable=self.hp_var, width=8).grid(row=3, column=1, sticky="w")
+        ttk.Label(form, text="Max HP").grid(row=3, column=2, sticky="e"); self.max_hp_var = tk.IntVar(); ttk.Spinbox(form, from_=1, to=99999, textvariable=self.max_hp_var, width=8).grid(row=3, column=3, sticky="w")
+        # Stats row 2
+        ttk.Label(form, text="QI").grid(row=4, column=0, sticky="e"); self.qi_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=99999, textvariable=self.qi_var, width=8).grid(row=4, column=1, sticky="w")
+        ttk.Label(form, text="Max QI").grid(row=4, column=2, sticky="e"); self.max_qi_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=99999, textvariable=self.max_qi_var, width=8).grid(row=4, column=3, sticky="w")
+        # Stats row 3
+        ttk.Label(form, text="Strength").grid(row=5, column=0, sticky="e"); self.str_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=9999, textvariable=self.str_var, width=8).grid(row=5, column=1, sticky="w")
+        ttk.Label(form, text="Agility").grid(row=5, column=2, sticky="e"); self.agi_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=9999, textvariable=self.agi_var, width=8).grid(row=5, column=3, sticky="w")
+        ttk.Label(form, text="Defense").grid(row=5, column=4, sticky="e"); self.def_var = tk.IntVar(); ttk.Spinbox(form, from_=0, to=9999, textvariable=self.def_var, width=8).grid(row=5, column=5, sticky="w")
+        # Skills
+        ttk.Label(form, text="Skills (skill_id:tier, comma-separated)").grid(row=6, column=0, sticky="e"); self.skills_var = tk.StringVar(); ttk.Entry(form, textvariable=self.skills_var, width=40).grid(row=6, column=1, columnspan=5, sticky="w")
 
         self.refresh_list()
 
@@ -602,9 +611,14 @@ class CharacterEditorView(ttk.Frame):
         self.id_var.set(ch.get("id",""))
         self.name_var.set(ch.get("name",""))
         self.faction_var.set(ch.get("faction",""))
-        self.hp_var.set(int(stats.get("hp", 100)))
-        self.qi_var.set(int(stats.get("qi", 100)))
+        # Populate stats with full schema coverage
+        self.hp_var.set(int(stats.get("hp", stats.get("max_hp", 100))))
+        self.max_hp_var.set(int(stats.get("max_hp", max(1, int(stats.get("hp", 100))))))
+        self.qi_var.set(int(stats.get("qi", stats.get("max_qi", 100))))
+        self.max_qi_var.set(int(stats.get("max_qi", max(0, int(stats.get("qi", 100))))))
+        self.str_var.set(int(stats.get("strength", 10)))
         self.agi_var.set(int(stats.get("agility", 10)))
+        self.def_var.set(int(stats.get("defense", 10)))
         # serialize equipped skills
         skills = ch.get("skills", [])
         self.skills_var.set(",".join(f"{s.get('skill_id')}:{int(s.get('tier',1))}" for s in skills if s.get("skill_id")))
@@ -619,16 +633,32 @@ class CharacterEditorView(ttk.Frame):
                     skills.append({"skill_id": sid.strip(), "tier": int(tier)})
                 except Exception:
                     pass
+        # Build schema-compliant character dict
+        stats = {
+            "hp": int(self.hp_var.get()),
+            "max_hp": int(self.max_hp_var.get() or self.hp_var.get()),
+            "qi": int(self.qi_var.get()),
+            "max_qi": int(self.max_qi_var.get() or self.qi_var.get()),
+            "strength": int(self.str_var.get()),
+            "agility": int(self.agi_var.get()),
+            "defense": int(self.def_var.get()),
+        }
         return {
             "id": self.id_var.get().strip(),
             "name": self.name_var.get().strip(),
             "faction": self.faction_var.get().strip(),
-            "stats": {"hp": int(self.hp_var.get()), "qi": int(self.qi_var.get()), "agility": int(self.agi_var.get())},
+            "stats": stats,
             "skills": skills
         }
 
     def new_character(self):
-        new = {"id":"new_char","name":"新角色","faction":"","stats":{"hp":100,"qi":100,"agility":10},"skills":[]}
+        new = {
+            "id":"new_char",
+            "name":"新角色",
+            "faction":"",
+            "stats":{"hp":100,"max_hp":100,"qi":100,"max_qi":100,"strength":10,"agility":10,"defense":10},
+            "skills":[]
+        }
         self.app.characters.append(new)
         self.refresh_list()
         self.listbox.selection_clear(0, tk.END)
@@ -665,6 +695,8 @@ class SkillEditorView(ttk.Frame):
         super().__init__(master)
         self.app = app_context
         self._build()
+        # internal state for grid editing
+        self._editing = {"row": None, "column": None}
 
     def _build(self):
         toolbar = ttk.Frame(self)
@@ -684,15 +716,94 @@ class SkillEditorView(ttk.Frame):
 
         form = ttk.Frame(body)
         form.pack(side="left", fill="both", expand=True, padx=(8,0))
+        # Ensure body expands columns properly with 1200px width
+        body.grid_columnconfigure(0, weight=1)
+        body.grid_columnconfigure(1, weight=2)
 
         ttk.Label(form, text="ID").grid(row=0, column=0, sticky="e"); self.id_var = tk.StringVar(); ttk.Entry(form, textvariable=self.id_var, width=40).grid(row=0, column=1, sticky="w")
         ttk.Label(form, text="Name").grid(row=1, column=0, sticky="e"); self.name_var = tk.StringVar(); ttk.Entry(form, textvariable=self.name_var, width=40).grid(row=1, column=1, sticky="w")
         ttk.Label(form, text="Type").grid(row=2, column=0, sticky="e"); self.type_var = tk.StringVar(); ttk.Entry(form, textvariable=self.type_var, width=40).grid(row=2, column=1, sticky="w")
 
-        # Tiers as a simple text area: one tier per line with key=value;key=value
-        ttk.Label(form, text="Tiers (one per line, key=value;...)").grid(row=3, column=0, sticky="ne")
-        self.tiers_text = tk.Text(form, height=10, width=60)
-        self.tiers_text.grid(row=3, column=1, sticky="w")
+        # Tiers grid with per-cell validation
+        ttk.Label(form, text="Tiers").grid(row=3, column=0, sticky="ne")
+        tiers_frame = ttk.Frame(form)
+        tiers_frame.grid(row=3, column=1, sticky="nsew")
+        # Make form column stretch
+        form.grid_rowconfigure(3, weight=1)
+        form.grid_columnconfigure(1, weight=1)
+
+        # Include narrative_template column to satisfy schema and enable editing
+        columns = ("tier","base_damage","hit_chance","crit_chance","qi_cost","cooldown","power_multiplier","tier_name","narrative_template")
+        self.tiers_tree = ttk.Treeview(tiers_frame, columns=columns, show="headings", height=10)
+        headings = {
+            "tier":"tier","base_damage":"base_damage","hit_chance":"hit_chance","crit_chance":"crit_chance",
+            "qi_cost":"qi_cost","cooldown":"cooldown","power_multiplier":"power_multiplier","tier_name":"tier_name",
+            "narrative_template":"narrative_template"
+        }
+        for cid, text in headings.items():
+            self.tiers_tree.heading(cid, text=text)
+            # set reasonable widths for 1200px layout
+            if cid == "narrative_template":
+                width = 380
+                anchor = "w"
+            elif cid == "tier_name":
+                width = 160
+                anchor = "center"
+            else:
+                width = 90
+                anchor = "center"
+            self.tiers_tree.column(cid, width=width, anchor=anchor, stretch=True)
+        self.tiers_tree.pack(fill="both", expand=True, side="left")
+
+        # Scrollbar
+        sb = ttk.Scrollbar(tiers_frame, orient="vertical", command=self.tiers_tree.yview)
+        self.tiers_tree.configure(yscrollcommand=sb.set)
+        sb.pack(fill="y", side="right")
+
+        # Inline editor (Entry overlay) — support single-line editing; narrative_template opens a modal for multi-line
+        self._edit_var = tk.StringVar()
+        self._edit_entry = ttk.Entry(self.tiers_tree, textvariable=self._edit_var)
+        self._edit_entry.bind("<Return>", lambda e: self._commit_cell_edit())
+        self._edit_entry.bind("<Escape>", lambda e: self._cancel_cell_edit())
+        # Commit edit when focus leaves the inline Entry (prevents value loss on mouse click)
+        self._edit_entry.bind("<FocusOut>", lambda e: self._commit_cell_edit())
+        # Begin edit on single click (more natural for grids) and double-click for safety
+        self.tiers_tree.bind("<Button-1>", self._begin_cell_edit)
+        self.tiers_tree.bind("<Double-1>", self._begin_cell_edit)
+
+        # Helper validators
+        def _is_int_ge(v: str, min_v: int) -> bool:
+            try:
+                return int(v) >= min_v
+            except Exception:
+                return False
+
+        def _is_num_ge(v: str, min_v: float) -> bool:
+            try:
+                return float(v) >= min_v
+            except Exception:
+                return False
+
+        def _is_prob(v: str) -> bool:
+            try:
+                x = float(v); return 0.0 <= x <= 1.0
+            except Exception:
+                return False
+
+        self._validators = {
+            "tier": lambda v: _is_int_ge(v, 1),
+            "base_damage": lambda v: _is_num_ge(v, 0.0),
+            "hit_chance": _is_prob,
+            "crit_chance": _is_prob,
+            "qi_cost": lambda v: _is_int_ge(v, 0),
+            "cooldown": lambda v: _is_int_ge(v, 0),
+            "power_multiplier": lambda v: True if v.strip()=="" else _is_num_ge(v, -float("inf")),
+            "tier_name": lambda v: True,
+            "narrative_template": lambda v: len(v.strip()) > 0
+        }
+
+        # Replace toolbar Add/Remove Tier to operate on grid as well
+        # Buttons already exist in main toolbar; keep their commands
 
         self.refresh_list()
 
@@ -716,34 +827,68 @@ class SkillEditorView(ttk.Frame):
         self.id_var.set(s.get("id",""))
         self.name_var.set(s.get("name",""))
         self.type_var.set(s.get("type",""))
-        # tiers to text
-        self.tiers_text.delete("1.0", tk.END)
+        # Populate tiers grid
+        for row in self.tiers_tree.get_children():
+            self.tiers_tree.delete(row)
         tiers = s.get("tiers", [])
+        # stable sort by tier if present
+        try:
+            tiers = sorted(tiers, key=lambda t: int(t.get("tier", 0)))
+        except Exception:
+            pass
         for t in tiers:
-            line = ";".join(f"{k}={v}" for k,v in t.items())
-            self.tiers_text.insert(tk.END, line + "\n")
+            # support both nested 'parameters' (correct schema) and legacy flat fields
+            p = t.get("parameters", t)
+            values = (
+                t.get("tier",""),
+                p.get("base_damage",""),
+                p.get("hit_chance",""),
+                p.get("critical_chance",""),
+                p.get("qi_cost",""),
+                p.get("cooldown",""),
+                p.get("power_multiplier",""),
+                t.get("tier_name",""),
+                t.get("narrative_template",""),
+            )
+            self.tiers_tree.insert("", "end", values=values)
 
     def _collect_form(self):
-        tiers_lines = self.tiers_text.get("1.0", tk.END).strip().splitlines()
+        # Collect from grid
         tiers = []
-        for line in tiers_lines:
-            if not line.strip(): continue
-            kv = {}
-            for pair in line.split(";"):
-                if "=" in pair:
-                    k, v = pair.split("=", 1)
-                    k = k.strip()
-                    v = v.strip()
-                    # basic number casting
-                    if v.isdigit():
-                        v = int(v)
-                    else:
-                        try:
-                            v = float(v)
-                        except Exception:
-                            pass
-                    kv[k] = v
-            tiers.append(kv)
+        for iid in self.tiers_tree.get_children():
+            row = dict(zip(
+                ("tier","base_damage","hit_chance","crit_chance","qi_cost","cooldown","power_multiplier","tier_name","narrative_template"),
+                self.tiers_tree.item(iid,"values")
+            ))
+            # Cast numeric fields
+            def _to_int(v):
+                try: return int(v)
+                except Exception: return 0
+            def _to_float(v):
+                try: return float(v)
+                except Exception: return 0.0
+            # Build schema-compliant tier with nested parameters
+            tier_num = _to_int(row.get("tier","1"))
+            params = {
+                "base_damage": int(_to_float(row.get("base_damage","0"))),  # integer per validation schema
+                "power_multiplier": max(0.0, _to_float(row.get("power_multiplier","0"))),  # min 0
+                "qi_cost": _to_int(row.get("qi_cost","0")),
+                "cooldown": _to_int(row.get("cooldown","0")),
+                "hit_chance": _to_float(row.get("hit_chance","1")),
+                "critical_chance": _to_float(row.get("crit_chance","0")),
+            }
+            tier_obj = {
+                "tier": tier_num,
+                "parameters": params,
+                "tier_name": str(row.get("tier_name","")).strip(),
+                "narrative_template": str(row.get("narrative_template","")),
+            }
+            tiers.append(tier_obj)
+        # Sort tiers by tier ascending
+        try:
+            tiers.sort(key=lambda t: int(t.get("tier",0)))
+        except Exception:
+            pass
         return {
             "id": self.id_var.get().strip(),
             "name": self.name_var.get().strip(),
@@ -760,26 +905,76 @@ class SkillEditorView(ttk.Frame):
     def add_tier(self):
         sel = self.listbox.curselection()
         if not sel: return
-        s = self._skills_raw[sel[0]]
-        tiers = s.setdefault("tiers", [])
-        next_tier = 1 + max((int(t.get("tier", 0)) for t in tiers), default=0)
-        tiers.append({"tier": next_tier, "base_damage": 10, "qi_cost": 0, "cooldown": 0, "hit_chance": 1.0, "crit_chance": 0.1})
-        self._load_selected()
+        # Add a new row to the grid with next tier number
+        current_tiers = []
+        for iid in self.tiers_tree.get_children():
+            vals = self.tiers_tree.item(iid,"values")
+            try:
+                current_tiers.append(int(vals[0]))
+            except Exception:
+                pass
+        next_tier = (max(current_tiers) + 1) if current_tiers else 1
+        new_vals = (next_tier, 10, 1.0, 0.1, 0, 0, "", "", "")
+        self.tiers_tree.insert("", "end", values=new_vals)
 
     def remove_tier(self):
         sel = self.listbox.curselection()
         if not sel: return
-        s = self._skills_raw[sel[0]]
-        tiers = s.setdefault("tiers", [])
-        if tiers:
-            tiers.pop()
-        self._load_selected()
+        # Remove selected grid row or last if none selected
+        selection = self.tiers_tree.selection()
+        if selection:
+            for iid in selection:
+                self.tiers_tree.delete(iid)
+        else:
+            children = self.tiers_tree.get_children()
+            if children:
+                self.tiers_tree.delete(children[-1])
 
     def save_current(self):
         sel = self.listbox.curselection()
-        if not sel: return
-        self._skills_raw[sel[0]] = self._collect_form()
-        self.refresh_list()
+        if not sel:
+            return
+        # Commit any active cell edit before reading grid values
+        if self._editing.get("row"):
+            self._commit_cell_edit()
+        # Validate grid values before updating in-memory model
+        bad_msgs = []
+        for iid in self.tiers_tree.get_children():
+            vals = dict(zip(("tier","base_damage","hit_chance","crit_chance","qi_cost","cooldown","power_multiplier","tier_name","narrative_template"),
+                            self.tiers_tree.item(iid,"values")))
+            for k, fn in self._validators.items():
+                if not fn(str(vals.get(k, "")).strip()):
+                    bad_msgs.append(f"Invalid {k}='{vals.get(k)}' in row with tier={vals.get('tier')}")
+        if bad_msgs:
+            messagebox.showerror("Validation", "\n".join(bad_msgs))
+            return
+        # Update in-memory
+        selected_index = sel[0]
+        self._skills_raw[selected_index] = self._collect_form()
+        # Persist immediately to disk to avoid data loss on exit
+        try:
+            payload = {"skills": self._skills_raw}
+            self.app.validator.validate("skills", payload)
+            path = os.path.join(self.app.data_dir, "skills.json")
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False, indent=2)
+            # Reload runtime SkillDB and datasets
+            from pathlib import Path as _P
+            self.app.skills = self.app.data_manager.load_skills(_P(self.app.data_dir) / "skills.json")
+            current_name = self._skills_raw[selected_index].get("name","")
+            self.app.load_data_dir(self.app.data_dir)
+            # Refresh and restore selection
+            self.refresh_list()
+            if selected_index < self.listbox.size():
+                self.listbox.selection_set(selected_index)
+            else:
+                for i, s in enumerate(self._skills_raw):
+                    if s.get("name","") == current_name:
+                        self.listbox.selection_set(i)
+                        break
+            messagebox.showinfo("Saved", "Skill saved to JSON.")
+        except Exception as e:
+            messagebox.showerror("Save Error", str(e))
 
     def save_to_json(self):
         try:
@@ -795,6 +990,102 @@ class SkillEditorView(ttk.Frame):
             messagebox.showinfo("Saved", "Skills saved.")
         except Exception as e:
             messagebox.showerror("Save Error", str(e))
+    
+    # ===== Inline cell editing handlers for tiers_tree =====
+    def _treeview_identify_cell(self, event):
+        # Identify row iid and column id under cursor
+        region = self.tiers_tree.identify("region", event.x, event.y)
+        if region != "cell":
+            return None, None
+        row_id = self.tiers_tree.identify_row(event.y)
+        col_id = self.tiers_tree.identify_column(event.x)  # e.g. '#3'
+        return row_id, col_id
+
+    def _begin_cell_edit(self, event):
+        # Commit any prior edit before starting a new one (prevents losing previous input)
+        if self._editing.get("row"):
+            self._commit_cell_edit()
+        row_id, col_id = self._treeview_identify_cell(event)
+        if not row_id or not col_id:
+            return
+        # Map col index to column name
+        cols = self.tiers_tree["columns"]
+        try:
+            idx = int(col_id.replace("#","")) - 1
+        except Exception:
+            return
+        if idx < 0 or idx >= len(cols):
+            return
+        colname = cols[idx]
+        # narrative_template uses modal multiline editor
+        if colname == "narrative_template":
+            self._edit_narrative_modal(row_id, colname)
+            return
+        # Get bbox for overlay entry
+        bbox = self.tiers_tree.bbox(row_id, col_id)
+        if not bbox:
+            return
+        x, y, w, h = bbox
+        # Pre-fill with current value
+        values = list(self.tiers_tree.item(row_id, "values"))
+        cur_val = values[idx] if idx < len(values) else ""
+        self._edit_var.set(cur_val)
+        self._edit_entry.place(x=x, y=y, width=w, height=h)
+        self._edit_entry.focus_set()
+        self._editing = {"row": row_id, "column": colname, "index": idx}
+
+    def _commit_cell_edit(self):
+        if not self._editing.get("row"):
+            return
+        val = self._edit_var.get()
+        row_id = self._editing["row"]
+        idx = self._editing["index"]
+        colname = self._editing["column"]
+        # Validate
+        validator = self._validators.get(colname, lambda v: True)
+        if not validator(val.strip()):
+            messagebox.showerror("Validation", f"Invalid {colname}='{val}'")
+            return
+        values = list(self.tiers_tree.item(row_id, "values"))
+        # Ensure list long enough
+        while len(values) <= idx:
+            values.append("")
+        values[idx] = val
+        self.tiers_tree.item(row_id, values=values)
+        self._edit_entry.place_forget()
+        self._editing = {"row": None, "column": None}
+
+    def _cancel_cell_edit(self):
+        self._edit_entry.place_forget()
+        self._editing = {"row": None, "column": None}
+
+    def _edit_narrative_modal(self, row_id, colname):
+        # Modal dialog for multi-line editing of narrative_template
+        top = tk.Toplevel(self)
+        top.title("Edit narrative_template")
+        top.transient(self.winfo_toplevel())
+        top.grab_set()
+        cols = self.tiers_tree["columns"]
+        idx = cols.index(colname)
+        cur_values = list(self.tiers_tree.item(row_id, "values"))
+        cur_val = cur_values[idx] if idx < len(cur_values) else ""
+        txt = tk.Text(top, width=60, height=8, wrap="word")
+        txt.pack(fill="both", expand=True, padx=8, pady=8)
+        txt.insert("1.0", str(cur_val))
+        btns = ttk.Frame(top)
+        btns.pack(fill="x", padx=8, pady=(0,8))
+        def on_ok():
+            new_val = txt.get("1.0", "end-1c")
+            if not self._validators["narrative_template"](new_val):
+                messagebox.showerror("Validation", "narrative_template must be non-empty.")
+                return
+            cur_values[idx] = new_val
+            self.tiers_tree.item(row_id, values=cur_values)
+            top.destroy()
+        def on_cancel():
+            top.destroy()
+        ttk.Button(btns, text="OK", command=on_ok).pack(side="right", padx=4)
+        ttk.Button(btns, text="Cancel", command=on_cancel).pack(side="right")
 
 def main():
     app = App()

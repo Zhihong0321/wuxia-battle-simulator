@@ -36,16 +36,19 @@ What to test
   - narrative_type correct for hit, miss, crit
   - Names and tier names resolved via SkillDB lookups
   - damage_amount present and non-negative for hits
+  - tier_narrative_template present in context when defined on the skill tier
 - TextNarrator:
-  - select() is called; default template is used if no candidates
+  - Selection precedence honored: per-tier template > templates.json candidates > default template
+  - Default template used if no candidates
+  - Critical tag 【暴击！】 appended once when context.critical is true
   - TemplateEngine resolves {dot.paths} and logs missing variables gracefully
 
 6) Schema validation
 - Positive cases:
-  - Valid characters, skills (with tiers), templates, config pass.
+  - Valid characters (full stats: hp, max_hp, qi, max_qi, strength, agility, defense), skills (tiers with parameters and narrative_template), templates, config pass.
 - Negative cases:
-  - characters: negative stats rejected
-  - skills: invalid type (e.g., “healing” if schema disallows) rejected
+  - characters: negative stats or hp > max_hp rejected
+  - skills: missing narrative_template in any tier; parameters not nested; out-of-range hit/crit; non-integer base_damage; rejected
   - templates: invalid comparator or missing fields rejected
   - config: missing rng_seed rejected if required
 
@@ -55,7 +58,13 @@ What to test
   - Finish mode prints all narration and a final result line
   - Progressive mode prints lines over time and updates HP status between lines
 - Editors:
-  - Create/Edit/Delete followed by Save to JSON validates and persists; reload reflects changes
+  - Characters: edit full stats and equipped skills; Save to JSON validates and persists
+  - Skills: edit tiers via grid, including narrative_template modal; Save to JSON validates, persists, and reloads SkillDB
+
+Deterministic replay checks
+- After editing data (but keeping the same seed and unchanged teams), rerun and verify:
+  - If data is unchanged, narration lines and winner remain identical.
+  - If only per-tier narrative_template text changes, engine outcomes are unchanged; only narration strings differ while event sequence and winner remain identical.
 
 Suggested structure
 - tests/
@@ -65,6 +74,7 @@ Suggested structure
   - engine/test_state.py
   - narrator/test_mapping.py
   - narrator/test_templates.py
+  - narrator/test_precedence.py
   - data/test_schemas.py
   - ui/test_smoke.py (optional; can be an integration script rather than automated test)
 

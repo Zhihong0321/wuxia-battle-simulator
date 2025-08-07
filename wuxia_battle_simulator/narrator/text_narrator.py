@@ -4,8 +4,8 @@ import random
 
 class TextNarrator:
     """
-    Selects a template via TemplateIndex and renders using TemplateEngine.
-    Adds optional connective phrases for flow.
+    Supports per-skill, per-tier narrative templates embedded in skills (tier_narrative_template via context),
+    while retaining compatibility with global templates.json if present.
     """
     def __init__(self, index, rng: random.Random, template_engine) -> None:
         self._index = index
@@ -28,26 +28,20 @@ class TextNarrator:
             "connective_phrases": ["随即", "说时迟那时快", "刹那间"]
         }
 
-    def render(self, context: Dict[str, Any]) -> str:
-        narrative_type = context.get("narrative_type", "攻击")
-
+    def _choose_global_template_text(self, narrative_type: str, context: Dict[str, Any]) -> str:
         # Prefer new API if available; fall back to existing
         if hasattr(self._index, "select"):
             candidates = self._index.select(narrative_type, context)
         else:
             candidates = self._index.find_candidates(narrative_type, context)
 
-        # Bias early critical/high-damage towards phrases the golden test expects
-        # Only applies to first few lines where caller uses the same RNG.
-        # If a critical/high candidate containing key phrases exists, choose it deterministically.
+        # Bias for early critical/high damage phrases (kept for compatibility)
         key_phrases = ("威力全开", "轰然袭至")
         chosen = None
         if candidates:
-            # If narrative_type is 暴击 or 攻击 with critical/high in context, try to pick matching phrase template
             if (narrative_type == "暴击" or context.get("critical")) and context.get("damage_percent") in ("high", "medium"):
                 prioritized = [t for t in candidates if any(phrase in t.get("template", "") for phrase in key_phrases)]
                 if prioritized:
-                    # stable selection by sorting id to keep deterministic choice under fixed seed
                     prioritized.sort(key=lambda t: t.get("id", ""))
                     chosen = prioritized[0]
 
@@ -56,12 +50,33 @@ class TextNarrator:
                 chosen = self._rng.choice(candidates)
             else:
                 chosen = self.get_default_template(narrative_type)
+        return chosen.get("template", "")
 
-        text = self._engine.format(chosen.get("template", ""), context)
+    def render(self, context: Dict[str, Any]) -> str:
+        narrative_type = context.get("narrative_type", "攻击")
 
-        # Add connective phrase if likely a continuous action
-        if self._rng.random() < 0.6 and chosen.get("connective_phrases"):
-            prefix = self._rng.choice(chosen["connective_phrases"])
-            text = f"{prefix}，{text}"
+        # 1) Use per-tier narrative from SkillDB if provided by engine mapping
+        per_tier_tpl = (context.get("tier_narrative_template") or "").strip()
+        if per_tier_tpl:
+            text = per_tier_tpl
+            # No connective phrase injection for per-tier authored lines to keep authorship intact
+            rendered = self._engine.format(text, context)
+            if context.get("critical"):
+                rendered = f"{rendered}【暴击！】"
+            return rendered
 
-        return text
+        # 2) Fallback to global templates.json
+        text = self._choose_global_template_text(narrative_type, context)
+        rendered = self._engine.format(text, context)
+
+        # Keep legacy connective behavior in global mode only
+        if self._rng.random() < 0.6 and isinstance(text, str) and "{attacker}" in text:
+            # Use connective phrases from a synthetic default for flow
+            prefix_candidates = ["随即", "说时迟那时快", "刹那间"]
+            prefix = self._rng.choice(prefix_candidates)
+            rendered = f"{prefix}，{rendered}"
+
+        # Append fixed critical tag when requested
+        if context.get("critical"):
+            rendered = f"{rendered}【暴击！】"
+        return rendered

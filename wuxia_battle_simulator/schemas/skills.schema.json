@@ -17,10 +17,11 @@
     "tier": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["parameters"],
+      "required": ["parameters","narrative_template"],
       "properties": {
         "tier": { "type": "integer", "minimum": 1 },
         "tier_name": { "type": "string" },
+        "narrative_template": { "type": "string" },
         "parameters": {
           "type": "object",
           "additionalProperties": false,

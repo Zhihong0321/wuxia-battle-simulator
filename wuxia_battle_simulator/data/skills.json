@@ -17,8 +17,15 @@
             "hit_chance": 0.8,
             "critical_chance": 0.1
           },
-          "visual_effects": ["掌风", "气势"],
-          "sound_effects": ["怒喝", "掌风声"]
+          "visual_effects": [
+            "掌风",
+            "气势"
+          ],
+          "sound_effects": [
+            "怒喝",
+            "掌风声"
+          ],
+          "narrative_template": "{attacker}运转内劲，双掌翻涌，【{skill}】{tier_name}轰向{target}！"
         },
         {
           "tier": 2,
@@ -31,8 +38,15 @@
             "hit_chance": 0.85,
             "critical_chance": 0.15
           },
-          "visual_effects": ["掌风", "龙形气劲"],
-          "sound_effects": ["龙吟", "掌风声"]
+          "visual_effects": [
+            "掌风",
+            "龙形气劲"
+          ],
+          "sound_effects": [
+            "龙吟",
+            "掌风声"
+          ],
+          "narrative_template": "{attacker}龙吟长啸，【{skill}】{tier_name}劲气如潮，震碎空气，重击{target}！"
         }
       ]
     },
@@ -53,8 +67,13 @@
             "hit_chance": 0.7,
             "critical_chance": 0.05
           },
-          "visual_effects": ["太极图影"],
-          "sound_effects": ["呼吸声"]
+          "visual_effects": [
+            "太极图影"
+          ],
+          "sound_effects": [
+            "呼吸声"
+          ],
+          "narrative_template": "{attacker}以柔化刚，身形一转，【{skill}】{tier_name}借力打向{target}。"
         }
       ]
     },
@@ -75,8 +94,13 @@
             "hit_chance": 0.82,
             "critical_chance": 0.1
           },
-          "visual_effects": ["剑光"],
-          "sound_effects": ["破空声"]
+          "visual_effects": [
+            "剑光"
+          ],
+          "sound_effects": [
+            "破空声"
+          ],
+          "narrative_template": "{attacker}剑走轻灵，【{skill}】{tier_name}点刺而至，直取{target}要害！"
         },
         {
           "tier": 2,
@@ -89,8 +113,14 @@
             "hit_chance": 0.85,
             "critical_chance": 0.15
           },
-          "visual_effects": ["剑光", "寒芒"],
-          "sound_effects": ["破空声"]
+          "visual_effects": [
+            "剑光",
+            "寒芒"
+          ],
+          "sound_effects": [
+            "破空声"
+          ],
+          "narrative_template": "{attacker}怒喝一声，【{skill}】{tier_name}威力全开，剑光撕裂空气，重创{target}！"
         }
       ]
     },
@@ -111,8 +141,13 @@
             "hit_chance": 0.0,
             "critical_chance": 0.0
           },
-          "visual_effects": ["残影"],
-          "sound_effects": ["衣袂声"]
+          "visual_effects": [
+            "残影"
+          ],
+          "sound_effects": [
+            "衣袂声"
+          ],
+          "narrative_template": "{attacker}足踏轻灵步，【{skill}】{tier_name}身形一晃，避开{target}来招。"
         }
       ]
     },
@@ -133,8 +168,13 @@
             "hit_chance": 0.75,
             "critical_chance": 0.25
           },
-          "visual_effects": ["龙影"],
-          "sound_effects": ["龙吟"]
+          "visual_effects": [
+            "龙影"
+          ],
+          "sound_effects": [
+            "龙吟"
+          ],
+          "narrative_template": "{attacker}真气长啸，【{skill}】{tier_name}声震四野，剑势（掌劲）直迫{target}！"
         }
       ]
     },
@@ -155,8 +195,13 @@
             "hit_chance": 0.78,
             "critical_chance": 0.12
           },
-          "visual_effects": ["掌劲"],
-          "sound_effects": ["爆裂声"]
+          "visual_effects": [
+            "掌劲"
+          ],
+          "sound_effects": [
+            "爆裂声"
+          ],
+          "narrative_template": "{attacker}内劲鼓荡，【{skill}】{tier_name}阳刚之力直推{target}胸口！"
         }
       ]
     },
@@ -164,11 +209,9 @@
       "id": "skill_wudang_sword",
       "name": "武当太极剑",
       "type": "攻击",
-      "description": "以意御剑，圆融无碍",
       "tiers": [
         {
           "tier": 1,
-          "tier_name": "太极起势",
           "parameters": {
             "base_damage": 14,
             "power_multiplier": 0.95,
@@ -177,8 +220,8 @@
             "hit_chance": 0.84,
             "critical_chance": 0.1
           },
-          "visual_effects": ["剑圈"],
-          "sound_effects": ["破空声"]
+          "tier_name": "太极起势",
+          "narrative_template": "{attacker}以意御剑，【{skill}】{tier_name}圆融一划BESTTT，环压{target}要隘！"
         }
       ]
     },
@@ -199,8 +242,13 @@
             "hit_chance": 0.7,
             "critical_chance": 0.05
           },
-          "visual_effects": ["太极纹"],
-          "sound_effects": ["闷响"]
+          "visual_effects": [
+            "太极纹"
+          ],
+          "sound_effects": [
+            "闷响"
+          ],
+          "narrative_template": "{attacker}四两拨千斤，【{skill}】{tier_name}借势一引，将{target}劲力反送回去！"
         }
       ]
     }
